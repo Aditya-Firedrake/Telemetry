@@ -8,7 +8,7 @@ trigger:
 
 pool:
   name: ubuntu
-
+  
 stages:
   - stage: Test
     displayName: "Run Go Unit Tests"
@@ -36,16 +36,19 @@ stages:
           - checkout: self
           - task: SonarQubePrepare@7
             inputs:
-              SonarQube: 'sonar'
+              SonarQube: 'sonar'   # Service connection name
               scannerMode: 'cli'
               cliScannerVersion: '4.8.0.2856'
               configMode: 'manual'
               cliProjectKey: 'product-catalog'
               cliProjectName: 'Product Catalog'
               cliSources: 'src/product-catalog'
+              extraProperties: |
+                sonar.branch.name=
           - task: SonarQubeAnalyze@7
             inputs:
               jdkversion: 'JAVA_HOME_17_X64'
+
           - task: SonarQubePublish@7
             inputs:
               pollingTimeoutSec: '300'
@@ -59,7 +62,7 @@ stages:
           - checkout: self
           - task: Docker@2
             inputs:
-              containerRegistry: 'docker'  # service connection name
+              containerRegistry: 'docker'  # Service connection name
               repository: 'adityakrs/product-catalog'
               command: 'buildAndPush'
               Dockerfile: 'src/product-catalog/Dockerfile'
