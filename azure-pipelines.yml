@@ -4,11 +4,11 @@ trigger:
       - main
   paths:
     include:
-      - src/product-catalog/** 
+      - src/product-catalog/**
 
-pool: 
-  name : ubuntu
-  
+pool:
+  name: ubuntu
+
 stages:
   - stage: Test
     displayName: "Run Go Unit Tests"
@@ -28,7 +28,7 @@ stages:
             displayName: "Execute Go tests"
 
   - stage: sonar
-    displayName: sonar
+    displayName: "SonarQube Analysis"
     dependsOn: Test
     jobs:
       - job: sonar
@@ -39,11 +39,13 @@ stages:
               SonarQube: 'sonar'
               scannerMode: 'cli'
               cliScannerVersion: '4.8.0.2856'
-              configMode: 'file'
+              configMode: 'manual'
+              cliProjectKey: 'product-catalog'
+              cliProjectName: 'Product Catalog'
+              cliSources: 'src/product-catalog'
           - task: SonarQubeAnalyze@7
             inputs:
               jdkversion: 'JAVA_HOME_17_X64'
-
           - task: SonarQubePublish@7
             inputs:
               pollingTimeoutSec: '300'
@@ -62,4 +64,3 @@ stages:
               command: 'buildAndPush'
               Dockerfile: 'src/product-catalog/Dockerfile'
               buildContext: 'src/product-catalog'
-
