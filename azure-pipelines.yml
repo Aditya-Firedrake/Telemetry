@@ -1,13 +1,13 @@
 trigger:
   branches:
     include:
-      - dev
+      - main
   paths:
     include:
-      - src/payment/** 
+      - src/product-catalog/** 
 
 pool: 
-  name: ubuntu
+  name : ubuntu
   
 stages:
   - stage: Test
@@ -17,8 +17,12 @@ stages:
         steps:
           - checkout: self
 
+          - task: GoTool@0
+            inputs:
+              version: '1.22.2'
+
           - script: |
-              cd src/payment
+              cd src/product-catalog
               go mod tidy
               go test ./... -v
             displayName: "Execute Go tests"
