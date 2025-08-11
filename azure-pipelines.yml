@@ -27,6 +27,27 @@ stages:
               go test ./... -v
             displayName: "Execute Go tests"
 
+  - stage: sonar
+    displayName: sonar
+    dependsOn: Test
+    jobs:
+      - job: sonar
+        steps:
+          - checkout: self
+          - task: SonarQubePrepare@7
+            inputs:
+              SonarQube: 'sonar'
+              scannerMode: 'cli'
+              cliScannerVersion: '4.8.0.2856'
+              configMode: 'file'
+          - task: SonarQubeAnalyze@7
+            inputs:
+              jdkversion: 'JAVA_HOME_17_X64'
+
+          - task: SonarQubePublish@7
+            inputs:
+              pollingTimeoutSec: '300'
+
   - stage: buildandpush
     displayName: "Build and Push Docker Image"
     dependsOn: Test
