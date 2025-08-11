@@ -4,14 +4,12 @@ trigger:
       - dev
   paths:
     include:
-      - src/product-catalog/** 
-
+      - src/payment/** 
 
 pool: 
-  name : ubuntu
+  name: ubuntu
   
 stages:
-  # Stage 1: Run Go tests
   - stage: Test
     displayName: "Run Go Unit Tests"
     jobs:
@@ -19,14 +17,8 @@ stages:
         steps:
           - checkout: self
 
-          - task: GoTool@0
-            inputs:
-              version: '1.22.6'
-
           - script: |
               cd src/payment
               go mod tidy
               go test ./... -v
             displayName: "Execute Go tests"
-
-
