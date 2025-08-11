@@ -1,0 +1,32 @@
+trigger:
+  branches:
+    include:
+      - dev
+  paths:
+    include:
+      - src/product-catalog/** 
+
+
+pool: 
+  name : ubuntu
+  
+stages:
+  # Stage 1: Run Go tests
+  - stage: Test
+    displayName: "Run Go Unit Tests"
+    jobs:
+      - job: GoTest
+        steps:
+          - checkout: self
+
+          - task: GoTool@0
+            inputs:
+              version: '1.22'
+
+          - script: |
+              cd src/payment
+              go mod tidy
+              go test ./... -v
+            displayName: "Execute Go tests"
+
+
