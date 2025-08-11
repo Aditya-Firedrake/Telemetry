@@ -66,4 +66,4 @@ stages:
               repository: 'adityakrs/product-catalog'
               command: 'buildAndPush'
               Dockerfile: 'src/product-catalog/Dockerfile'
-              buildContext: 'src/product-catalog'
+              buildContext: 'src/product-catalog' 
