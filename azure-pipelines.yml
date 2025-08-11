@@ -4,10 +4,10 @@ trigger:
       - main
   paths:
     include:
-      - src/product-catalog/**
+      - src/product-catalog/** 
 
-pool:
-  name: ubuntu
+pool: 
+  name : ubuntu
   
 stages:
   - stage: Test
@@ -34,17 +34,17 @@ stages:
       - job: sonar
         steps:
           - checkout: self
+          
           - task: SonarQubePrepare@7
             inputs:
-              SonarQube: 'sonar'   # Service connection name
+              SonarQube: 'sonar'
               scannerMode: 'cli'
               cliScannerVersion: '4.8.0.2856'
               configMode: 'manual'
               cliProjectKey: 'product-catalog'
               cliProjectName: 'Product Catalog'
               cliSources: 'src/product-catalog'
-              extraProperties: |
-                sonar.branch.name=
+
           - task: SonarQubeAnalyze@7
             inputs:
               jdkversion: 'JAVA_HOME_17_X64'
@@ -62,7 +62,7 @@ stages:
           - checkout: self
           - task: Docker@2
             inputs:
-              containerRegistry: 'docker'  # Service connection name
+              containerRegistry: 'docker'  # service connection name
               repository: 'adityakrs/product-catalog'
               command: 'buildAndPush'
               Dockerfile: 'src/product-catalog/Dockerfile'
