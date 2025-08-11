@@ -26,3 +26,19 @@ stages:
               go mod tidy
               go test ./... -v
             displayName: "Execute Go tests"
+
+  - stage: buildandpush
+    displayName: "Build and Push Docker Image"
+    dependsOn: Test
+    jobs:
+      - job: BuildAndPush
+        steps:
+          - checkout: self
+          - task: Docker@2
+            inputs:
+              containerRegistry: 'docker'  # service connection name
+              repository: 'adityakrs/product-catalog'
+              command: 'buildAndPush'
+              Dockerfile: 'src/product-catalog/Dockerfile'
+              buildContext: 'src/product-catalog'
+
